@@ -13,12 +13,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+
 
 @utility bg-repeat-round {
   background-repeat: round;
@@ -67,6 +62,124 @@
 .footer__copyrights-link {
   @apply flex-1 flex sm:justify-end justify-center max-sm:mt-4 gap-10;
 }
+
+.searchbar {
+    @apply flex items-center justify-start max-sm:flex-col w-full relative max-sm:gap-4 max-w-3xl;
+  }
+
+  .searchbar__item {
+    @apply flex-1 max-sm:w-full flex justify-start items-center relative;
+  }
+
+  .searchbar__input {
+    @apply w-full h-[48px] pl-12 p-4 bg-neutral-100 rounded-r-full max-sm:rounded-full outline-none cursor-pointer text-sm;
+  }
+
+  .search-manufacturer {
+    @apply flex-1 max-sm:w-full flex justify-start items-center;
+  }
+
+  .search-manufacturer__input {
+    @apply w-full h-[48px] pl-12 p-4 rounded-l-full max-sm:rounded-full bg-neutral-100 outline-none cursor-pointer text-sm;
+  }
+
+  .search-manufacturer__options {
+    @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/50 focus:outline-none sm:text-sm;
+  }
+
+  .search-manufacturer__option {
+    @apply cursor-default select-none py-2 pl-10 pr-4 hover:bg-gray-100;
+  }
+
+
+.home__text-container {
+  @apply flex flex-col items-start justify-start gap-y-2.5 text-neutral-800;
+}
+
+.home__filters {
+  @apply mt-12 w-full flex justify-between items-center flex-wrap gap-5;
+}
+
+.home__filter-container {
+  @apply flex justify-start flex-wrap items-center gap-2;
+}
+
+.home__cars-wrapper {
+  @apply grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 w-full gap-8 pt-14;
+}
+
+.home__error-container {
+  @apply mt-16 flex justify-center items-center flex-col gap-2;
+}
+
+.car-card {
+  @apply flex flex-col p-6 justify-center items-start text-neutral-800 bg-blue-100 hover:bg-white hover:shadow-md rounded-3xl transition;
+}
+
+.car-card__content {
+  @apply w-full flex justify-between items-start gap-2;
+}
+
+.car-card__content-title {
+  @apply text-[22px] leading-[26px] font-bold capitalize;
+}
+
+.car-card__price {
+  @apply flex mt-6 text-[32px] leading-[38px] font-extrabold;
+}
+
+.car-card__price-dollar {
+  @apply self-start text-[14px] leading-[17px] font-semibold;
+}
+
+.car-card__price-day {
+  @apply self-end text-[14px] leading-[17px] font-medium;
+}
+
+.car-card__image {
+  @apply relative w-full h-40 my-3 object-contain;
+}
+
+.car-card__icon-container {
+  @apply flex group-hover:invisible w-full justify-between text-gray-500;
+}
+
+.car-card__icon {
+  @apply flex flex-col justify-center items-center gap-2;
+}
+
+.car-card__icon-text {
+  @apply text-[14px] leading-[17px];
+}
+
+.car-card__btn-container {
+  @apply hidden group-hover:flex absolute bottom-0 w-full z-10;
+}
+
+.car-details__dialog-panel {
+  @apply relative w-full max-w-lg max-h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5;
+}
+
+.car-details__close-btn {
+  @apply absolute top-2 right-2 z-10 w-fit p-2 bg-blue-100 rounded-full;
+}
+
+.car-details__main-image {
+  @apply relative w-full h-40 bg-[url('/pattern.png')] bg-cover bg-center rounded-lg;
+}
+
+
+
+.custom-filter__btn {
+  @apply relative w-full min-w-[127px] flex justify-between items-center cursor-default rounded-lg bg-white py-2 px-3 text-left shadow-md sm:text-sm border;
+}
+
+.custom-filter__options {
+  @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/50 focus:outline-none sm:text-sm;
+}
+
+
+
 
 body {
   background: var(--background);
