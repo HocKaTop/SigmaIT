@@ -12,17 +12,16 @@ const Hero = () => {
             <div className="flex-1 pt-36 padding-x">
 
                 <h1 className="hero__title">
-                    Sigma IT School
+                    Sigma Car
                 </h1>
 
-                <p className="hero__subtitle">IT - не сложно, если ты SIGMA </p>
+                <p className="hero__subtitle">Rent a car like a Sigma! </p>
 
-                <CustomButton 
-                title ="explore"
-                btnType="button"
-                containerStyles="bd-primary-blue text-white rounded-full mt-10"
-                handleClick ={handleScroll}
-                />
+                <CustomButton
+          title="Explore Cars"
+          containerStyles="bg-primary-blue text-white rounded-full mt-10"
+          handleClick={handleScroll}
+        />
 
             </div>
             <div className="hero__image-container">

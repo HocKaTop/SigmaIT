@@ -4,13 +4,22 @@ import { SearchBar } from "@/components";
 import {CustomFilter} from "@/components";
 import { fetchCars } from "@/utils";
 import {CarCard} from "@/components";
+import { fuels, manufacturers, yearsOfProduction } from "@/constants";
+import { useState } from "react";
+import { useEffect } from "react";
 
-export default async function Home() {
-  
-  const allCars = await fetchCars();
+export default async function Home({ searchParams }: { searchParams: { manufacturer?: string; year?: number; fuel?: string; limit?: number; model?: string } }) {
+  const allCars = await fetchCars({
+    manufacturer: searchParams.manufacturer || "",
+    year: searchParams.year || 2022,
+    fuel: searchParams.fuel || "",
+    limit: searchParams.limit || 10,
+    model: searchParams.model || "",
+  });
 
-  const isDataEmpty = !Array.isArray(allCars) || allCars.length<1 || !allCars;
- 
+  const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
+
+
 
   return (
     <main className="overflow-hidden">
@@ -21,12 +30,12 @@ export default async function Home() {
           <p>Explore the cars</p>
         </div>
 
-      <div className="home__filters">
-      <SearchBar />
-      <div className="home__filters-container">
-       <CustomFilter title="fuel"/>
-       <CustomFilter title="year"/>  
-      </div>
+      <div className="home__filters flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <SearchBar />
+        <div className="home__filters-container flex gap-4">
+          <CustomFilter title="fuel" options={fuels}/>
+          <CustomFilter title="year" options={yearsOfProduction}/>  
+        </div>
       </div>
 
       {!isDataEmpty ? (

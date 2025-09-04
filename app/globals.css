@@ -11,8 +11,14 @@
   --background-hero-bg: url('/public/hero-bg.png');
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-black-100: #2B2C35;
+  --color-primary-blue: #2B59FF;
+  --color-primary-blue-100: #F5F8FF;
+  --color-secondary-orange: #f79761;
+  --color-light-white: rgba(59,60,152,0.03);
+  --color-light-white-100: rgba(59,60,152,0.02);
+  --color-grey: #747A88;
 }
-
 
 
 @utility bg-repeat-round {
@@ -28,7 +34,7 @@
 }
 
 .hero__subtitle {
-  @apply text-[27px] text-gray-300 font-light mt-5;
+  @apply text-[27px] text-black-100 font-light mt-5;
 }
 
 .custom-btn {
