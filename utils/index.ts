@@ -12,11 +12,10 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
   return rentalRatePerDay.toFixed(0);
 };
 
-// 🔑 Получение JWT
+
 let cachedJwt: string | null = null;
 let jwtExpiry = 0;
 
-// 🔑 Получение JWT
 async function getJwtToken() {
   const res = await fetch("https://carapi.app/api/auth/login", {
     method: "POST",
@@ -43,7 +42,7 @@ export async function fetchCars(filters: {
 }) {
   const { manufacturer, year, fuel, limit, model } = filters;
 
-  // 🔄 Проверяем, не истёк ли токен
+  //Проверяем, не истёк ли токен
   if (!cachedJwt || Date.now() > jwtExpiry) {
     const jwt = await getJwtToken();
     cachedJwt = jwt;
@@ -64,7 +63,7 @@ export async function fetchCars(filters: {
   if (manufacturer) searchParams.append("make", manufacturer);
   if (model) searchParams.append("model", model);
   if (limit) searchParams.append("page[size]", limit.toString());
-  // fuel фильтруем вручную потом, API напрямую не принимает
+
 
   const url = `https://carapi.app/api/trims/v2?${searchParams.toString()}`;
 
