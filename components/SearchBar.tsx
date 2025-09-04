@@ -9,7 +9,11 @@ import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-ser
 
 
 const SearchButton = ({otherClasses}:{otherClasses:string}) =>(
-  <button type="submit" className={`-ml-3 z-10 ${otherClasses}`}>
+  <button
+    type="button"
+    onClick={(e) => e.currentTarget.form?.requestSubmit()}
+    className={`ml-3 z-10 cursor-pointer ${otherClasses}`}
+  >
    <Image 
    src="/magnifying-glass.svg"
    alt="magnifying-glass"

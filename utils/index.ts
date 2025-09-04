@@ -1,64 +1,90 @@
-import { CarProps } from "@/types";
-import { FilterProps } from "@/types";
+import { CarProps, FilterProps } from "@/types";
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
-  const basePricePerDay = 50; // Base rental price per day in dollars
-  const mileageFactor = 0.1; // Additional rate per mile driven
-  const ageFactor = 0.05; // Additional rate per year of vehicle age
+  const basePricePerDay = 50;
+  const mileageFactor = 0.1;
+  const ageFactor = 0.05;
 
-  // Calculate additional rate based on mileage and age
   const mileageRate = city_mpg * mileageFactor;
   const ageRate = (new Date().getFullYear() - year) * ageFactor;
 
-  // Calculate total rental rate per day
   const rentalRatePerDay = basePricePerDay + mileageRate + ageRate;
-
   return rentalRatePerDay.toFixed(0);
 };
 
+// 🔑 Получение JWT
+let cachedJwt: string | null = null;
+let jwtExpiry = 0;
 
-export async function fetchCars(filters: FilterProps) {
-  const { manufacturer, year, model, limit, fuel } = filters;
+// 🔑 Получение JWT
+async function getJwtToken() {
+  const res = await fetch("https://carapi.app/api/auth/login", {
+    method: "POST",
+    headers: {
+      Accept: "text/plain",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      api_token: "652802f1-5c7d-40ab-b0a2-73727cac81a3",
+      api_secret: "2a25d83a44cf0ca11e86db243d0fb3ee",
+    }),
+  });
 
-  const apiKey = '6a57978f04mshb148bc988406979p1f4da7jsn304c99f342e3';
-  if (!apiKey) {
-    console.error('RAPIDAPI_KEY is not set');
-    return [];
+  if (!res.ok) throw new Error("JWT auth failed: " + (await res.text()));
+  return res.text();
+}
+
+export async function fetchCars(filters: {
+  manufacturer?: string;
+  year?: number;
+  fuel?: string;
+  limit?: number;
+  model?: string;
+}) {
+  const { manufacturer, year, fuel, limit, model } = filters;
+
+  // 🔄 Проверяем, не истёк ли токен
+  if (!cachedJwt || Date.now() > jwtExpiry) {
+    const jwt = await getJwtToken();
+    cachedJwt = jwt;
+
+    // Вытаскиваем exp из JWT
+    const payload = JSON.parse(Buffer.from(jwt.split(".")[1], "base64").toString());
+    jwtExpiry = payload.exp * 1000 - 60 * 1000; // обновляем заранее за 1 мин
   }
 
   const headers = {
-    'X-RapidAPI-Key': '6a57978f04mshb148bc988406979p1f4da7jsn304c99f342e3',
-    'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com',
-    'Accept': 'application/json',
-  } as Record<string, string>;
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${cachedJwt}`,
+  };
 
-  const params = new URLSearchParams();
-  if (manufacturer) params.set('make', manufacturer);
-  if (year) params.set('year', String(year));
-  if (model) params.set('model', model);
-  if (limit) params.set('limit', String(limit));
-  if (fuel) params.set('fuel_type', fuel);
+  const searchParams = new URLSearchParams();
 
-  const url = `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars${params.toString() ? `?${params.toString()}` : ''}`;
+  if (year) searchParams.append("year", year.toString());
+  if (manufacturer) searchParams.append("make", manufacturer);
+  if (model) searchParams.append("model", model);
+  if (limit) searchParams.append("page[size]", limit.toString());
+  // fuel фильтруем вручную потом, API напрямую не принимает
 
-  const response = await fetch(url, { headers, method: 'GET' });
+  const url = `https://carapi.app/api/trims/v2?${searchParams.toString()}`;
+
+  console.log("Fetching CarAPI URL:", url);
+
+  const response = await fetch(url, { headers });
+
   if (!response.ok) {
-    const errorText = await response.text().catch(() => '');
-    console.error('Failed to fetch cars', { url, status: response.status, statusText: response.statusText, body: errorText });
+    console.error("CarAPI fetch failed:", response.status, response.statusText);
     return [];
   }
 
-  const result = await response.json();
-  return result;
+  const data = await response.json();
+
+  return data?.data || [];
 }
 
 export const updateSearchParams = (type: string, value: string) => {
-  
   const searchParams = new URLSearchParams(window.location.search);
-
   searchParams.set(type, value);
-
   const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
-
   return newPathname;
 };
